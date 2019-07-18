@@ -12,44 +12,84 @@ import UIKit
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
-//      let structureMap = loadJson(filename: "Structure")
-////
-//  dump(structureMap)
-       let draftMap = loadJson(filename: "Draft_values")!
-        saveToJsonFile(json: draftMap, name: "filename")
-        //print(draftMap)
-//        for draft in draftMap {
-//            for var structure in structureMap! where structure.id == draft.id {
-//                if ((draft.value as? String) != nil) {
-//                    structure.value = draft.value as? String
-//                } else {
-//                    structure.value = structure.values?.first(where: {$0.id == (draft.value as? Int) ?? nil})?.title
-//
-//
-//                }
-//
-//           dump(structure)
-//            }
-//        }
-     //  let url = Bundle.main.url(forResource: "Structure", withExtension: "json")
-       // let data = try? Data(contentsOf: url!)
-//        let decoder = JSONDecoder()
-//        let jsonData = try? decoder.decode(RequestCodable.self, from: data!)
-//        dump(jsonData)
-//           }
-//
+      let structureJSON = loadJson(filename: "Structure")
+        let draftMap = loadJsonDraft(filename: "Draft_values")
+        let structureMap = RequestCodable(json: structureJSON!)
+        for draft in (draftMap!) {
+            for var structure in (structureMap?.params)! {
+                if draft.id == structure.id {
+                    if type(of: draft.value) == Int.self {
+                    structure.value = poisk(id: draft.id)
+                    print("uspeh")
+                        print(draft)
+                        break
+                    } else { structure.value = draft.value as! String
+                    }
+                } else {print("net")}
+            }
+        }
         
-        
+        }
     }
     
     
+
+
+func poisk(id:Int) -> String {
+    let structureJSON = loadJson(filename: "Structure")
+    let structureMap = RequestCodable(json: structureJSON!)
+    
+    for requestcodable in (structureMap?.params)! {
+        if requestcodable.id == id {
+            return requestcodable.title
+                } else {
+        for structure in requestcodable.values! {
+            if structure.id == id {
+                return structure.title
+                    } else {
+                    for structurevalue in structure.params! {
+                                if structurevalue.id == id {
+                                    return structurevalue.title
+                                    
+                                } else {
+        for params in structurevalue.values!{
+            if params.id == id {
+                return params.title
+                
+            }
+                                }
+                        }
+            }
+                }
+    }
 }
+}
+    return "kek"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 func saveToJsonFile(json : [String:Any] , name : String) {
         guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
         let fileUrl = documentDirectoryUrl.appendingPathComponent(name)
         do {
-            let data = try JSONSerialization.data(withJSONObject: json, options: [])
+            let data = try JSONSerialization.data(withJSONObject: json, options: []) 
             print(fileUrl)
             try data.write(to: fileUrl, options: [])
         } catch {
@@ -72,4 +112,17 @@ func loadJson(filename fileName: String) -> [String:Any]? {
         }
 
 
+func loadJsonDraft(filename fileName: String) -> [DraftValues]? {
+    if let url = Bundle.main.url(forResource: fileName, withExtension: "json") {
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            let jsonData = try decoder.decode(Draft.self, from: data)
+            return jsonData.values
+        } catch {
+            print("error:\(error)")
+        }
+    }
+    return nil
+}
 

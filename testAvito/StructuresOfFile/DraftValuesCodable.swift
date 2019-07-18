@@ -22,7 +22,7 @@ struct DraftValues: Decodable {
     }
   
     init(from decoder: Decoder) throws {
-        
+
         do {
             let container = try decoder.container(keyedBy: CodingKeys.self)
             if let stringProperty = try? container.decode(String.self, forKey: .value) {
@@ -34,11 +34,10 @@ struct DraftValues: Decodable {
             } else {
                 throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath, debugDescription: "Not a JSON"))
             }
-            
+
         }
-        
+
     }
-    
 }
-    
+
 
