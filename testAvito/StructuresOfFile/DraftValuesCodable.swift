@@ -7,9 +7,10 @@
 //
 
 import Foundation
- struct Draft : Decodable {
+
+struct Draft : Decodable {
     var values : [DraftValues]?
-}
+    }
 
 struct DraftValues: Decodable {
     var id: Int
