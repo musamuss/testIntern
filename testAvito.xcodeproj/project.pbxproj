@@ -17,6 +17,7 @@
 		840320C822DF26DC0061309A /* StructCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840320C722DF26DC0061309A /* StructCodable.swift */; };
 		840320CC22DF30590061309A /* DraftValuesCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840320CB22DF30590061309A /* DraftValuesCodable.swift */; };
 		84FDA1E622E0F27D002DB042 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = 84FDA1E522E0F27D002DB042 /* error.json */; };
+		84FE2D3722E1D8EB00E3919A /* AnyValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FE2D3622E1D8EB00E3919A /* AnyValue.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		840320C722DF26DC0061309A /* StructCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructCodable.swift; sourceTree = "<group>"; };
 		840320CB22DF30590061309A /* DraftValuesCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraftValuesCodable.swift; sourceTree = "<group>"; };
 		84FDA1E522E0F27D002DB042 /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
+		84FE2D3622E1D8EB00E3919A /* AnyValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyValue.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				840320B022DF0C420061309A /* LaunchScreen.storyboard */,
 				840320B322DF0C420061309A /* Info.plist */,
 				840320BF22DF1BF80061309A /* JSON */,
+				84FE2D3622E1D8EB00E3919A /* AnyValue.swift */,
 			);
 			path = testAvito;
 			sourceTree = "<group>";
@@ -89,8 +92,8 @@
 		840320D522DF62C50061309A /* StructuresOfFile */ = {
 			isa = PBXGroup;
 			children = (
-				840320CB22DF30590061309A /* DraftValuesCodable.swift */,
 				840320C722DF26DC0061309A /* StructCodable.swift */,
+				840320CB22DF30590061309A /* DraftValuesCodable.swift */,
 			);
 			path = StructuresOfFile;
 			sourceTree = "<group>";
@@ -169,6 +172,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84FE2D3722E1D8EB00E3919A /* AnyValue.swift in Sources */,
 				840320CC22DF30590061309A /* DraftValuesCodable.swift in Sources */,
 				840320C822DF26DC0061309A /* StructCodable.swift in Sources */,
 				840320AA22DF0C410061309A /* ViewController.swift in Sources */,

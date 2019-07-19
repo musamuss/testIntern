@@ -12,22 +12,26 @@ import UIKit
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
-      let structureJSON = loadJson(filename: "Structure")
-        let draftMap = loadJsonDraft(filename: "Draft_values")
-        let structureMap = RequestCodable(json: structureJSON!)
-        for draft in (draftMap!) {
-            for var structure in (structureMap?.params)! {
-                if draft.id == structure.id {
-                    if type(of: draft.value) == Int.self {
-                    structure.value = poisk(id: draft.id)
-                    print("uspeh")
-                        print(draft)
-                        break
-                    } else { structure.value = draft.value as! String
-                    }
-                } else {print("net")}
-            }
-        }
+      //let structureJSON = loadJson(filename: "Structure")
+       let draftJSON = loadJson(filename: "Draft_values")
+       
+        //let structureMap = RequestCodable(json: structureJSON!)
+        let draftMap = Draft(json: draftJSON!)
+        dump(draftMap)
+       // dump(draftMap)
+//        for draft in ((draftMap?.values)!) {
+//            for var structure in (structureMap?.params)! {
+//                if draft.id == structure.id {
+//                    if type(of: draft.value) == Int.self {
+//                    structure.value = poisk(id: draft.id)
+//                    print("uspeh")
+//                        print(draft)
+//                        break
+//                    } else { structure.value = draft.value as? String
+//                    }
+//                } else {print("net")}
+//            }
+//        }
         
         }
     }

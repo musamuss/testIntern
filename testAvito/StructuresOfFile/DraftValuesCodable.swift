@@ -8,36 +8,56 @@
 
 import Foundation
 
-struct Draft : Decodable {
+struct Draft : Codable {
     var values : [DraftValues]?
+    enum CodingKeys: String, CodingKey {
+        case values
+    }
+    init?(json: [String:Any]) {
+        if let values = json["values"] as? [[String:Any]] {
+            self.values = values.compactMap({valueJson ->
+                DraftValues? in
+                return DraftValues(json: valueJson)
+            })
+        }
+    }
     }
 
-struct DraftValues: Decodable {
+struct DraftValues: Codable {
     var id: Int
-    var value: Any
+    var value: AnyValue
     
     enum CodingKeys: String, CodingKey {
-        case value
         case id
+        case value
+        
     }
-  
-    init(from decoder: Decoder) throws {
-
-        do {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            if let stringProperty = try? container.decode(String.self, forKey: .value) {
-                value = stringProperty
-                id = try! container.decode(Int.self, forKey: .id)
-            } else if let intProperty = try? container.decode(Int.self, forKey: .value) {
-                value = intProperty
-                id = try! container.decode(Int.self, forKey: .id)
-            } else {
-                throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath, debugDescription: "Not a JSON"))
-            }
-
-        }
-
+    init?(json: [String:Any]) {
+        guard let id = json["id"] as? Int,
+        let value = json["value"] as? AnyValue
+            else { return nil}
+        self.id = id
+        self.value = value
+        
     }
 }
-
+//extension DraftValues {
+//        init(from decoder: Decoder) throws {
+//
+//            do {
+//                let container = try decoder.container(keyedBy: CodingKeys.self)
+//                if let stringProperty = try? container.decode(String.self, forKey: .value) {
+//                    value = stringProperty
+//                    //id = try! container.decode(Int.self, forKey: .id)
+//                } else if let intProperty = try? container.decode(Int.self, forKey: .value) {
+//                    value = intProperty
+//                    //id = try! container.decode(Int.self, forKey: .id)
+//                } else {
+//                    throw DecodingError.dataCorrupted(DecodingError.Context(codingPath: container.codingPath, debugDescription: "Not a JSON"))
+//                }
+//
+//            }
+//
+//        }
+//}
 
