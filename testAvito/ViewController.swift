@@ -11,13 +11,13 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    override func viewDidLoad() {
+    override func viewDidLoad() { 
       //let structureJSON = loadJson(filename: "Structure")
        let draftJSON = loadJson(filename: "Draft_values")
        
         //let structureMap = RequestCodable(json: structureJSON!)
-        let draftMap = Draft(json: draftJSON!)
-        dump(draftMap)
+        //let draftMap = Draft(json: draftJSON!)
+        dump(draftJSON)
        // dump(draftMap)
 //        for draft in ((draftMap?.values)!) {
 //            for var structure in (structureMap?.params)! {
@@ -95,7 +95,7 @@ func saveToJsonFile(json : [String:Any] , name : String) {
         do {
             let data = try JSONSerialization.data(withJSONObject: json, options: []) 
             print(fileUrl)
-            try data.write(to: fileUrl, options: [])
+            try data.write(to: URL(fileURLWithPath: "System⁩/Пользователи⁩/admin⁩/Документы⁩/GitHub⁩/testAvito⁩/testIntern⁩/testAvito" + "/result.json"))
         } catch {
             print(error)
         }
@@ -116,17 +116,4 @@ func loadJson(filename fileName: String) -> [String:Any]? {
         }
 
 
-func loadJsonDraft(filename fileName: String) -> [DraftValues]? {
-    if let url = Bundle.main.url(forResource: fileName, withExtension: "json") {
-        do {
-            let data = try Data(contentsOf: url)
-            let decoder = JSONDecoder()
-            let jsonData = try decoder.decode(Draft.self, from: data)
-            return jsonData.values
-        } catch {
-            print("error:\(error)")
-        }
-    }
-    return nil
-}
 

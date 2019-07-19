@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Draft : Codable {
+struct Draft  {
     var values : [DraftValues]?
     enum CodingKeys: String, CodingKey {
         case values
@@ -23,24 +23,26 @@ struct Draft : Codable {
     }
     }
 
-struct DraftValues: Codable {
-    var id: Int
-    var value: AnyValue
+struct DraftValues {
+    let id : Int
+    let value: Any
     
-    enum CodingKeys: String, CodingKey {
-        case id
-        case value
-        
-    }
-    init?(json: [String:Any]) {
+    init?(json: [String: Any]) {
         guard let id = json["id"] as? Int,
-        let value = json["value"] as? AnyValue
-            else { return nil}
-        self.id = id
-        self.value = value
-        
+            json.keys.contains("value")
+            else {
+                return nil
+        }
+        let value = json["value"]
+        (self.id, self.value) = (id, value!)
     }
 }
+    
+    
+    
+            
+    
+
 //extension DraftValues {
 //        init(from decoder: Decoder) throws {
 //
@@ -60,4 +62,5 @@ struct DraftValues: Codable {
 //
 //        }
 //}
+
 

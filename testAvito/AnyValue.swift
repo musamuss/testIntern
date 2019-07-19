@@ -11,8 +11,6 @@ struct AnyValue: Codable {
     
     private var int: Int?
     private var string: String?
-    private var bool: Bool?
-    private var double: Double?
     
     init(_ int: Int) {
         self.int = int
@@ -22,13 +20,6 @@ struct AnyValue: Codable {
         self.string = string
     }
     
-    init(_ bool: Bool) {
-        self.bool = bool
-    }
-    
-    init(_ double: Double) {
-        self.double = double
-    }
     
     init(from decoder: Decoder) throws {
         if let int = try? decoder.singleValueContainer().decode(Int.self) {
@@ -41,14 +32,6 @@ struct AnyValue: Codable {
             return
         }
         
-        if let bool = try? decoder.singleValueContainer().decode(Bool.self) {
-            self.bool = bool
-            return
-        }
-        
-        if let double = try? decoder.singleValueContainer().decode(Double.self) {
-            self.double = double
-        }
     }
     
     
@@ -66,15 +49,6 @@ struct AnyValue: Codable {
                 return
             }
             
-            if let value = anyValue as? Bool {
-                try container.encode(value)
-                return
-            }
-            
-            if let value = anyValue as? Double {
-                try container.encode(value)
-                return
-            }
         }
         
         try container.encodeNil()
@@ -82,6 +56,6 @@ struct AnyValue: Codable {
     
     
     func value() -> Any? {
-        return self.int ?? self.string ?? self.bool ?? self.double
+        return self.int ?? self.string
     }
 }
