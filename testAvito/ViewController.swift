@@ -15,12 +15,13 @@ class ViewController: UIViewController {
      
         let structureJSON = loadJson(filename: "Structure")
         let draftJSON = loadJson(filename: "Draft_values")
-        let structureMap = RequestCodable(json: structureJSON!)
+        var structureMap = RequestCodable(json: structureJSON!)
         let draftMap = Draft(json: draftJSON!)
         //dump(structureMap)
+       search(structure: &structureMap!, draft: draftMap!)
+        //dump(result)
         
-     //   saveToJsonFile(json: structureJSON!, name: "/name.json")
-
+        saveToJSON(json: structureMap!, name: "kek.json")
 
     }
    
@@ -33,21 +34,47 @@ class ViewController: UIViewController {
 
 
 //сохранение в файл
-
-func saveToJsonFile(json : [String:Any] , name : String) {
-    let file = "name.json"
-    let path = URL(fileURLWithPath: "/Users⁩/⁨admin⁩/Documents⁩/GitHub⁩/testAvito⁩/testIntern⁩/testAvito⁩")
-    if let dir =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-        do {
-            let fileURL = dir.appendingPathComponent(file)
-            let data = try JSONSerialization.data(withJSONObject: json, options: [])
-            print(fileURL)
-            try data.write(to: fileURL)
-        } catch {
-            print(error)
-        }
+func saveToJSON (json: RequestCodable, name: String){
+    guard let URLdir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        return
     }
-}
+    let fileUrl = URLdir.appendingPathComponent(name)
+    do {
+        let data = try JSONSerialization.data(withJSONObject: json, options: [])
+        print(fileUrl)
+        try data.write(to: fileUrl)
+    } catch {
+        print(error)
+    }
+    }
+
+
+//func saveTo(result: StructureWithValues, path: String) {
+//    let encoder = JSONEncoder()
+//    encoder.outputFormatting = .prettyPrinted
+//    let data = try? encoder.encode(result)
+//    do {
+//        try data!.write(to: URL(fileURLWithPath: path + "result.json"))
+//    } catch {
+//        print("error 04: incorrect URL")
+//    }
+//
+//}
+
+//func saveToJsonFile(json : StructureWithValues) {
+//    let file = "/name.json"
+//    //let path = URL(fileURLWithPath: "/Users⁩/⁨admin⁩/Documents⁩/GitHub⁩/testAvito⁩/testIntern⁩/testAvito⁩")
+//    if let dir =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+//        do {
+//            let fileURL = dir.appendingPathComponent(file)
+//            let data = try JSONSerialization.data(withJSONObject: json, options: [])
+//            print(fileURL)
+//            try data.write(to: fileURL)
+//        } catch {
+//            print(error)
+//        }
+//    }
+//}
 
  // загрузка файлов
 func loadJson(filename fileName: String) -> [String:Any]? {
@@ -65,28 +92,45 @@ func loadJson(filename fileName: String) -> [String:Any]? {
         }
 
 
-func search(structure: inout [Structure], draft: [DraftValues]) {
-    for i in 0...structure.count-1 {
-        if draft[structure[i].id] != nil {
-            if let newKey = draft[structure[i].id].value as? Int{
-                var (newValue, index) = ("",0)
-                for j in 0...structure[i].values!.count-1{
-                    if structure[i].values![j].id == newKey {
-                        newValue = structure[i].values![j].title
-                        index = j
-                        break
-                    }
-                    if j == structure[i].values!.count {
-                        print("Error")
+func search(structure: inout RequestCodable, draft: Draft) {
+    var i = 0
+    for selectedStructure in structure.params!{
+        for draftSelected in draft.values!{
+            if selectedStructure.id == draftSelected.id{
+                if selectedStructure.values != nil{
+                    for selectedStructureValues in selectedStructure.values!{
+                        if selectedStructureValues.id == draftSelected.value as? Int{
+                            if selectedStructureValues.params != nil{
+                                structure.params![i].value = "\(selectedStructureValues.title)  \(subSearch(structure: selectedStructureValues, draft: draft))"
+                            }
+                            else{
+                                structure.params![i].value = selectedStructureValues.title
+                            }
+                        }
                     }
                 }
-               structure[i].value = newValue as String
-                if structure[i].values![index].params != nil {
-                    search(structure: &structure[i].values![index].params!, draft: draft)
+                else{
+                    structure.params![i].value = draftSelected.value as? String
                 }
-            } else {
-                structure[i].value = draft[structure[i].id].value as? String
+            }
+        }
+        i+=1
+    }
+}
+func subSearch(structure:  StructureValue, draft: Draft) -> String {
+    
+    for selectedStructure in structure.params!{
+        for draftSelected in draft.values!{
+            if selectedStructure.id == draftSelected.id{
+                for selectedStructureValues in selectedStructure.values!{
+                    if selectedStructureValues.id == draftSelected.value as? Int{
+                        return selectedStructureValues.title
+                    }
+                }
             }
         }
     }
+    return ""
 }
+
+
