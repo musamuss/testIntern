@@ -12,95 +12,44 @@ import UIKit
 class ViewController: UIViewController {
     
     override func viewDidLoad() { 
-      //let structureJSON = loadJson(filename: "Structure")
-       let draftJSON = loadJson(filename: "Draft_values")
-       
-        //let structureMap = RequestCodable(json: structureJSON!)
-        //let draftMap = Draft(json: draftJSON!)
-        dump(draftJSON)
-       // dump(draftMap)
-//        for draft in ((draftMap?.values)!) {
-//            for var structure in (structureMap?.params)! {
-//                if draft.id == structure.id {
-//                    if type(of: draft.value) == Int.self {
-//                    structure.value = poisk(id: draft.id)
-//                    print("uspeh")
-//                        print(draft)
-//                        break
-//                    } else { structure.value = draft.value as? String
-//                    }
-//                } else {print("net")}
-//            }
-//        }
+     
+        let structureJSON = loadJson(filename: "Structure")
+        let draftJSON = loadJson(filename: "Draft_values")
+        let structureMap = RequestCodable(json: structureJSON!)
+        let draftMap = Draft(json: draftJSON!)
+        //dump(structureMap)
         
-        }
+     //   saveToJsonFile(json: structureJSON!, name: "/name.json")
+
+
     }
+   
     
-    
-
-
-func poisk(id:Int) -> String {
-    let structureJSON = loadJson(filename: "Structure")
-    let structureMap = RequestCodable(json: structureJSON!)
-    
-    for requestcodable in (structureMap?.params)! {
-        if requestcodable.id == id {
-            return requestcodable.title
-                } else {
-        for structure in requestcodable.values! {
-            if structure.id == id {
-                return structure.title
-                    } else {
-                    for structurevalue in structure.params! {
-                                if structurevalue.id == id {
-                                    return structurevalue.title
-                                    
-                                } else {
-        for params in structurevalue.values!{
-            if params.id == id {
-                return params.title
-                
-            }
-                                }
-                        }
-            }
-                }
-    }
-}
-}
-    return "kek"
 }
 
 
 
+// functions
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+//сохранение в файл
 
 func saveToJsonFile(json : [String:Any] , name : String) {
-        guard let documentDirectoryUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-        let fileUrl = documentDirectoryUrl.appendingPathComponent(name)
+    let file = "name.json"
+    let path = URL(fileURLWithPath: "/Users⁩/⁨admin⁩/Documents⁩/GitHub⁩/testAvito⁩/testIntern⁩/testAvito⁩")
+    if let dir =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
         do {
-            let data = try JSONSerialization.data(withJSONObject: json, options: []) 
-            print(fileUrl)
-            try data.write(to: URL(fileURLWithPath: "System⁩/Пользователи⁩/admin⁩/Документы⁩/GitHub⁩/testAvito⁩/testIntern⁩/testAvito" + "/result.json"))
+            let fileURL = dir.appendingPathComponent(file)
+            let data = try JSONSerialization.data(withJSONObject: json, options: [])
+            print(fileURL)
+            try data.write(to: fileURL)
         } catch {
             print(error)
         }
     }
+}
 
+ // загрузка файлов
 func loadJson(filename fileName: String) -> [String:Any]? {
             if let url = Bundle.main.url(forResource: fileName, withExtension: "json") {
                 do {
@@ -116,4 +65,28 @@ func loadJson(filename fileName: String) -> [String:Any]? {
         }
 
 
-
+func search(structure: inout [Structure], draft: [DraftValues]) {
+    for i in 0...structure.count-1 {
+        if draft[structure[i].id] != nil {
+            if let newKey = draft[structure[i].id].value as? Int{
+                var (newValue, index) = ("",0)
+                for j in 0...structure[i].values!.count-1{
+                    if structure[i].values![j].id == newKey {
+                        newValue = structure[i].values![j].title
+                        index = j
+                        break
+                    }
+                    if j == structure[i].values!.count {
+                        print("Error")
+                    }
+                }
+               structure[i].value = newValue as String
+                if structure[i].values![index].params != nil {
+                    search(structure: &structure[i].values![index].params!, draft: draft)
+                }
+            } else {
+                structure[i].value = draft[structure[i].id].value as? String
+            }
+        }
+    }
+}
