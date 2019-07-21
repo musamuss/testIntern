@@ -9,5 +9,6 @@
 import Foundation
 
 struct StructureWithValues : Codable {
-    var params : [RequestCodable]
+    var params : RequestCodable
+    
 }

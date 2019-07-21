@@ -20,8 +20,12 @@ class ViewController: UIViewController {
         //dump(structureMap)
        search(structure: &structureMap!, draft: draftMap!)
         //dump(result)
+        let dic: [String:Any] = structureMap
+        let data = try? JSONEncoder().encode(structureMap) as? [String:Any]
         
-        saveToJSON(json: structureMap!, name: "kek.json")
+        
+       
+        saveToJSON(json: data!, name: "kek.json")
 
     }
    
@@ -34,7 +38,7 @@ class ViewController: UIViewController {
 
 
 //сохранение в файл
-func saveToJSON (json: RequestCodable, name: String){
+func saveToJSON (json: [String:Any], name: String){
     guard let URLdir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
         return
     }

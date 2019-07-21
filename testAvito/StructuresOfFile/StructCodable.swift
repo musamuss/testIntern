@@ -11,7 +11,7 @@ import Foundation
 struct RequestCodable: Codable {
     var params:[Structure]?
     enum CodingKeys: String, CodingKey {
-        case params
+        case params 
         }
     init?(json: [String:Any]) {
       
