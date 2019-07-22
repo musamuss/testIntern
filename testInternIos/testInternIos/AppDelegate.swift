@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  testAvito
+//  testInternIos
 //
-//  Created by Admin on 17/07/2019.
+//  Created by Муса Дениев on 22.07.2019.
 //  Copyright © 2019 musamuss. All rights reserved.
 //
 
